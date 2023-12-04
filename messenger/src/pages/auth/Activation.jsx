@@ -1,30 +1,39 @@
 import "./Auth.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import useFormFields from "../../hooks/useFormFields";
 import { useDispatch, useSelector } from "react-redux";
-import { activateAccountByOTP } from "../../features/auth/authApiSlice";
+import { activateAccountByLink, activateAccountByOTP } from "../../features/auth/authApiSlice";
 import { createToast } from "../../utils/toast";
 import { getAuthData, setMessageEmpty } from "../../features/auth/authSlice";
 import { tokenEncode } from "../../helpers/helpers";
 
 const Activation = () => {
   const token = Cookies.get("verifyToken");
+  const {tokenURL} = useParams()
   const { message, error } = useSelector(getAuthData);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { input, handleInputChange, resetForm } = useFormFields({
     otp: "",
   });
+
   const handleAccountActivation = (e) => {
     e.preventDefault();
     dispatch(
       activateAccountByOTP({ token: tokenEncode(token), otp: input.otp })
     );
   };
+
+  useEffect(() => {
+    if(tokenURL){
+      dispatch(activateAccountByLink(tokenURL))
+    }
+  }, [tokenURL, dispatch])
+
   useEffect(() => {
     if (!token) {
       navigate("/login");

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  activateAccountByLink,
   activateAccountByOTP,
   createUser,
   getLoggedInUser,
@@ -43,7 +44,7 @@ const authSlice = createSlice({
         state.message = action.payload.message;
         state.loader = false
       })
-    // account activation
+    // account activation by otp
       .addCase(activateAccountByOTP.pending, (state) => {
         state.loader = true
       })
@@ -52,6 +53,18 @@ const authSlice = createSlice({
         state.loader = false
       })
       .addCase(activateAccountByOTP.fulfilled, (state, action) => {
+        state.message = action.payload.message;
+        state.loader = false
+      })
+    // account activation by link
+      .addCase(activateAccountByLink.pending, (state) => {
+        state.loader = true
+      })
+      .addCase(activateAccountByLink.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loader = false
+      })
+      .addCase(activateAccountByLink.fulfilled, (state, action) => {
         state.message = action.payload.message;
         state.loader = false
       })

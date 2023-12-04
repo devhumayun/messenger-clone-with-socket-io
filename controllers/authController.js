@@ -89,7 +89,6 @@ export const logout = asyncHandler(async (req, res) => {
  * @access public
  */
 export const register = asyncHandler(async (req, res) => {
-
   const { name, auth, password } = req.body;
 
   if (!name || !auth || !password) {
@@ -184,50 +183,80 @@ export const register = asyncHandler(async (req, res) => {
     user,
     message: "User Created successful",
   });
-
 });
 
 /**
  * Account Activation By OTP
  */
-export const accountActivationByOTP = asyncHandler(async(req, res) => {
-  const {otp} = req.body
-  const {token} = req.params
-  if(!token){
+export const accountActivationByOTP = asyncHandler(async (req, res) => {
+  const { otp } = req.body;
+  const { token } = req.params;
+  if (!token) {
     return res.status(400).json({ message: "Token not found" });
   }
-  if(!otp){
+  if (!otp) {
     return res.status(400).json({ message: "OTP is requried" });
   }
-  const tokenDecoded = tokenDecode(token)
-  const tokenVerify = jwt.verify(tokenDecoded, process.env.ACCESS_TOKEN_SECRET )
-  if(!tokenVerify){
-    return res.status(400).json({ message: "Invalid account activation request!" });
+  const tokenDecoded = tokenDecode(token);
+  const tokenVerify = jwt.verify(tokenDecoded, process.env.ACCESS_TOKEN_SECRET);
+  if (!tokenVerify) {
+    return res
+      .status(400)
+      .json({ message: "Invalid account activation request!" });
   }
 
   let activatedUser = null;
-  if(isMobile(tokenVerify.auth)){
-    activatedUser = await User.findOne({phone: tokenVerify.auth})
-    if(!activatedUser){
+  if (isMobile(tokenVerify.auth)) {
+    activatedUser = await User.findOne({ phone: tokenVerify.auth });
+    if (!activatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-  }else if(isEmail(tokenVerify.auth)){
-    activatedUser = await User.findOne({email: tokenVerify.auth})
-    if(!activatedUser){
+  } else if (isEmail(tokenVerify.auth)) {
+    activatedUser = await User.findOne({ email: tokenVerify.auth });
+    if (!activatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
   }
 
-  if(otp !== activatedUser.accessToken){
+  if (otp !== activatedUser.accessToken) {
     return res.status(400).json({ message: "Invalid OTP" });
   }
 
-  activatedUser.accessToken = null
-  activatedUser.save()
-  res.clearCookie("verifyToken")
+  activatedUser.accessToken = null;
+  activatedUser.save();
+  res.clearCookie("verifyToken");
 
   return res.status(200).json({ message: "Account activation successfull" });
-})
+});
+/**
+ * Account Activation By Link
+ */
+export const accountActivationByLink = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  if (!token) {
+    return res.status(400).json({ message: "Token not found" });
+  }
+  const tokenDecoded = tokenDecode(token);
+  const tokenVerify = jwt.verify(tokenDecoded, process.env.ACCESS_TOKEN_SECRET);
+  if (!tokenVerify) {
+    return res
+      .status(400)
+      .json({ message: "Invalid account activation request!" });
+  }
+
+  let activatedUser = null;
+  if (isEmail(tokenVerify.auth)) {
+    activatedUser = await User.findOne({ email: tokenVerify.auth });
+    if (!activatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+  }
+  activatedUser.accessToken = null;
+  activatedUser.save();
+  res.clearCookie("verifyToken");
+
+  return res.status(200).json({ message: "Account activation successfull" });
+});
 
 /**
  * @DESC Create new User
@@ -251,4 +280,3 @@ export const makeHashPass = asyncHandler(async (req, res) => {
   const hashPass = await bcrypt.hash(password, 10);
   res.status(200).json({ hashPass });
 });
-

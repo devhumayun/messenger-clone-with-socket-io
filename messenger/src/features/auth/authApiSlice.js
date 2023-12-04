@@ -17,11 +17,27 @@ export const createUser = createAsyncThunk("auth/createUser", async (data) => {
     throw new Error(error.response.data.message);
   }
 });
-// account activation
+// account activation by otp
 export const activateAccountByOTP = createAsyncThunk("auth/activateAccountByOTP", async (data) => {
   try {
     const response = await axios.post(
       `http://localhost:5050/api/v1/auth/activation-by-otp/${data.token}`,
+      {otp: data.otp},
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
+// account activation by link
+export const activateAccountByLink = createAsyncThunk("auth/activateAccountByLink", async (data) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5050/api/v1/auth/activation-by-link/${data}`,
       {otp: data.otp},
       {
         withCredentials: true,
