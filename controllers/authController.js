@@ -19,18 +19,27 @@ import { AccountActivationEmail } from "../mails/AccountActivationMail.js";
  * @access public
  */
 export const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { auth, password } = req.body;
 
   // validation
-  if (!email || !password)
+  if (!auth || !password)
     return res.status(404).json({ message: "All fields are required" });
 
+  let loginUser = null
+  // find login user by phone
+  if(isMobile(auth)){
+    loginUser = await User.findOne({ phone:auth })
+    if(!loginUser){
+      return res.status(404).json({ message: "User not found" });
+    }
+  }
   // find login user by email
-  const loginUser = await User.findOne({ email }).populate("role");
-
-  // user not found
-  if (!loginUser) return res.status(404).json({ message: "User not found" });
-
+  if(isEmail(auth)){
+    loginUser = await User.findOne({ email:auth })
+    if(!loginUser){
+      return res.status(404).json({ message: "User not found" });
+    }
+  }
   // password check
   const passwordCheck = await bcrypt.compare(password, loginUser.password);
 
@@ -40,19 +49,10 @@ export const login = asyncHandler(async (req, res) => {
 
   // create access token
   const token = jwt.sign(
-    { email: loginUser.email },
+    { auth:auth },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE_IN,
-    }
-  );
-
-  // create Refresh token
-  const refreshToken = jwt.sign(
-    { email: loginUser.email },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRE_IN,
     }
   );
 
