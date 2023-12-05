@@ -226,7 +226,7 @@ export const accountActivationByOTP = asyncHandler(async (req, res) => {
   activatedUser.save();
   res.clearCookie("verifyToken");
 
-  return res.status(200).json({ message: "Account activation successfull" });
+  return res.status(200).json({ message: "Account activation successfull", user: activatedUser });
 });
 /**
  * Account Activation By Link
@@ -259,6 +259,72 @@ export const accountActivationByLink = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Resent Account Activation
+ */
+export const resentAccountActivation = asyncHandler( async ( req, res ) => {
+  const {auth} = req.params
+    // auth value manage
+    let authEmail = null;
+    let authPhone = null;
+    let authuser = null
+  
+    // create a access token for account activation
+    const activationCode = createOTP();
+  
+    if (isMobile(auth)) {
+      authPhone = auth;
+  
+      // check mobile exists or not
+      authuser = await User.findOne({ phone: auth });
+
+      // create verification token
+      const verifyToken = jwt.sign(
+        { auth: auth },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "15m",
+        }
+      );
+      res.cookie("verifyToken", verifyToken);
+  
+      // send OTP to user mobile
+      await sendSMS(
+        auth,
+        `Hello ${authuser.name}, Your account activation code is : ${activationCode}`
+      );
+    } else if (isEmail(auth)) {
+      authEmail = auth;
+  
+      // check mobile exists or not
+       authuser = await User.findOne({ email: auth });
+  
+      // create verification token
+      const verifyToken = jwt.sign(
+        { auth: auth },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "15m",
+        }
+      );
+      res.cookie("verifyToken", verifyToken);
+  
+      // activation link
+      const activationLink = `http://localhost:3000/activation/${tokenEncode(
+        verifyToken
+      )}`;
+      // send ativation link to email
+      await AccountActivationEmail(auth, {
+        name : authuser.name,
+        code: activationCode,
+        link: activationLink,
+      });
+    }
+    authuser.accessToken = activationCode
+    authuser.save()
+    return res.status(200).json({ message: "Resent Activation sent successfull" });
+})
+
+/**
  * @DESC Create new User
  * @ROUTE /api/v1/user
  * @method POST
@@ -280,3 +346,6 @@ export const makeHashPass = asyncHandler(async (req, res) => {
   const hashPass = await bcrypt.hash(password, 10);
   res.status(200).json({ hashPass });
 });
+
+
+

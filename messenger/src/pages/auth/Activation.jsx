@@ -21,6 +21,7 @@ const Activation = () => {
     otp: "",
   });
 
+  // handle account activation
   const handleAccountActivation = (e) => {
     e.preventDefault();
     dispatch(

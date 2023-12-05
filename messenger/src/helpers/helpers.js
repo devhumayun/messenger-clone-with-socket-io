@@ -156,3 +156,31 @@ export const tokenDecode = (inputString) => {
   return stringWithDots;
 };
 
+/**
+ * email secure/hide
+ */
+export const hideEmailMiddlePart = (email) => {
+  const splitEmail = email.split("@")
+
+  const firstChar = splitEmail[0].charAt(0)
+  const lastChar = splitEmail[0].slice(-1)
+  const middle = splitEmail[0].slice(1, -1).replace(/./g, "*")
+
+  const hiddenEmail = firstChar + middle + lastChar +"@" + splitEmail[1]
+
+  return hiddenEmail
+}
+
+/**
+ * Hide mobile number
+ */
+export const hideMobileMiddlePart = (mobile) => {
+
+  const firstChar = mobile.substr(0, 4)
+  const lastChar = mobile.slice(-1)
+  const middle = mobile.slice(1, -1).replace(/./g, "*")
+
+  const hiddenMobile = firstChar + middle + lastChar
+
+  return hiddenMobile
+}

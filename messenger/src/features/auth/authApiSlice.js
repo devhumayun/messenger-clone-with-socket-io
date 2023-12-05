@@ -98,3 +98,19 @@ export const getLoggedInUser = createAsyncThunk(
     }
   }
 );
+
+// resent activation code
+export const resentActivationCode = createAsyncThunk("auth/resentActivationCode", async (auth) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5050/api/v1/auth/resent-activation/${auth}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});

@@ -97,7 +97,7 @@ const TopBar = () => {
           </div>
         </div>
       </div>
-      <Activate />
+      { user.accessToken && <Activate />}
     </>
   );
 };
