@@ -1,5 +1,9 @@
+import TopBar from "../../components/Topbar/TopBar.jsx";
+
 const Messenger = () => {
-  return <div>Messenger</div>;
+  return <>
+      <TopBar />
+  </>;
 };
 
 export default Messenger;
