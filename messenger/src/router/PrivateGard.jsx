@@ -4,7 +4,16 @@ import { Navigate, Outlet } from "react-router-dom";
 const PrivateGard = () => {
   const { user } = useSelector((state) => state.auth);
 
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  if (user) {
+    if (user.accessToken) {
+      return <Navigate to="/activation-after-login" />;
+    }else{
+
+      return <Outlet />;
+    }
+  } else {
+    return <Navigate to="/login" />;
+  }
 };
 
 export default PrivateGard;
