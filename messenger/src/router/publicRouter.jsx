@@ -3,6 +3,7 @@ import Forgot from "../pages/auth/Forgot";
 import Home from "../pages/auth/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import Reset from "../pages/auth/Reset";
 import PublicGard from "./PublicGard";
 
 // create public router
@@ -25,6 +26,10 @@ const publicRouter = [
       {
         path: "/forgot",
         element: <Forgot />,
+      },
+      {
+        path: "/reset",
+        element: <Reset />,
       },
       {
         path: "/activation",

@@ -11,6 +11,10 @@ import useAuthUser from "../../hooks/useAuthUser";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authApiSlice";
 import Activate from "../ActivateAfterLogin/Activate";
+import HomeSvg from "../Svg/HomeSvg";
+import VideoSvg from "../Svg/VideoSvg";
+import MarketPlaceSvg from "../Svg/MarketPlaceSvg";
+import GroupSvg from "../Svg/GroupSvg";
 
 const TopBar = () => {
   const { user } = useAuthUser();
@@ -41,20 +45,22 @@ const TopBar = () => {
             <ul>
               <li>
                 <Link to="#">
-                  {" "}
-                  <GrHomeRounded />{" "}
+                  <HomeSvg />
                 </Link>
               </li>
               <li>
                 <Link to="#">
-                  {" "}
-                  <MdOutlineOndemandVideo />{" "}
+                  <VideoSvg />
                 </Link>
               </li>
               <li>
                 <Link to="#">
-                  {" "}
-                  <CiShop />{" "}
+                 <MarketPlaceSvg />
+                </Link>
+              </li>
+              <li>
+                <Link to="#">
+                 <GroupSvg />
                 </Link>
               </li>
             </ul>
