@@ -7,7 +7,9 @@ import {
   makeHashPass,
   accountActivationByOTP,
   accountActivationByLink,
-  resentAccountActivation
+  resentAccountActivation,
+  resetPassword,
+  resetPasswordAction
 } from "../controllers/authController.js";
 import tokenVerify from "../middlewares/verifyToken.js";
 
@@ -21,6 +23,8 @@ router.route("/register").post(register);
 router.route("/activation-by-otp/:token").post(accountActivationByOTP);
 router.route("/activation-by-link/:token").post(accountActivationByLink);
 router.route("/resent-activation/:auth").get(resentAccountActivation);
+router.route("/reset-password").post(resetPassword);
+router.route("/reset-password-action/:token").post(resetPasswordAction);
 
 router.get("/me", tokenVerify, loggedInUser);
 

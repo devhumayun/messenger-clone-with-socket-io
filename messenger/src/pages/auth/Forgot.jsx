@@ -1,9 +1,40 @@
 import "./Auth.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import PageHeader from "../../components/PageHeader/PageHeader";
+import useFormFields from "../../hooks/useFormFields";
+import { useDispatch, useSelector } from 'react-redux'
+import { resetPasswordUi } from "../../features/auth/authApiSlice";
+import { getAuthData, setMessageEmpty } from "../../features/auth/authSlice";
+import { useEffect } from "react";
+import { createToast } from "../../utils/toast";
 
 const Forgot = () => {
+
+  const dispatch = useDispatch()
+  const { message, error } = useSelector(getAuthData);
+  const navigate = useNavigate()
+  const { input, handleInputChange }  = useFormFields({
+    auth: ""
+  })
+
+  const handleResetForm = (e) => {
+    e.preventDefault()
+    dispatch(resetPasswordUi(input))
+  }
+
+  useEffect(() => {
+    if (message) {
+      createToast(message, "success");
+      dispatch(setMessageEmpty());
+      navigate("/reset-password")
+    }
+    if (error) {
+      createToast(error);
+      dispatch(setMessageEmpty());
+    }
+  }, [message, error, dispatch, navigate]);
+
   return (
     <>
       {" "}
@@ -18,10 +49,10 @@ const Forgot = () => {
               />
 
               <div className="auth-form">
-                <form action="">
-                  <input type="text" placeholder="Email or Phone number" />
+                <form onSubmit={handleResetForm}>
+                  <input type="text" placeholder="Email or Phone number" name="auth" value={input.auth} onChange={handleInputChange} />
 
-                  <button className="bg-fb-green">Reset your password</button>
+                  <button type="submit" className="bg-fb-green">Reset your password</button>
                 </form>
               </div>
             </div>

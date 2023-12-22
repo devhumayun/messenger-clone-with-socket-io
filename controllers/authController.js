@@ -347,5 +347,126 @@ export const makeHashPass = asyncHandler(async (req, res) => {
   res.status(200).json({ hashPass });
 });
 
+/**
+ * Reset Password
+ */
+export const resetPassword = asyncHandler(async (req, res) => {
+  const {auth} = req.body
+
+    if(!auth){
+      return res.status(400).json({ message: "Use your email or number" });
+    }
+
+    let resetUserData = null
+    // create a access token for account activation
+    const activationCode = createOTP();
+  
+    if (isMobile(auth)) {
+
+      // check mobile exists or not
+      resetUserData = await User.findOne({ phone: auth });
+
+      if(!resetUserData){
+        return res.status(404).json({ message: "User no exist with this number" });
+      }
+
+      // create verification token
+      const verifyToken = jwt.sign(
+        { auth: auth },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "15m",
+        }
+      );
+      res.cookie("verifyToken", verifyToken);
+  
+      // send OTP to user mobile
+      await sendSMS(
+        auth,
+        `Hello ${resetUserData.name}, Your Password reset code is : ${activationCode}`
+      );
+    } else if (isEmail(auth)) {
+
+      // check mobile exists or not
+       resetUserData = await User.findOne({ email: auth });
+
+      // create verification token
+      const verifyToken = jwt.sign(
+        { auth: auth },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "15m",
+        }
+      );
+      res.cookie("verifyToken", verifyToken);
+  
+      // activation link
+      const activationLink = `http://localhost:3000/activation/${tokenEncode(
+        verifyToken
+      )}`;
+      // send ativation link to email
+      await AccountActivationEmail(auth, {
+        name : resetUserData.name,
+        code: activationCode,
+        link: activationLink,
+      });
+    }
+    resetUserData.accessToken = activationCode
+    resetUserData.save()
+    return res.status(200).json({ message: "Activation sent successfull" });
+
+})
+
+/**
+ * reset password action
+ */
+export const resetPasswordAction = asyncHandler(async(req, res) => {
+  const { token } = req.params
+  const { newPassword, confPassword, otp } = req.body
+
+  if (!token) {
+    return res.status(400).json({ message: "Token not found" });
+  }
+  if (!otp) {
+    return res.status(400).json({ message: "OTP is requried" });
+  }
+  if (!newPassword) {
+    return res.status(400).json({ message: "New Password is requried" });
+  }
+  if (!confPassword) {
+    return res.status(400).json({ message: "Confirm Password is requried" });
+  }
+  if ( newPassword !== confPassword) {
+    return res.status(400).json({ message: "Password not match" });
+  }
+  const tokenDecoded = tokenDecode(token);
+  const tokenVerify = jwt.verify(tokenDecoded, process.env.ACCESS_TOKEN_SECRET);
+  if (!tokenVerify) {
+    return res
+      .status(400)
+      .json({ message: "Invalid token" });
+  }
+  console.log(tokenVerify);
+  let resetRequestUser = null;
+  if (isMobile(tokenVerify.auth)) {
+    resetRequestUser = await User.findOne({ phone: tokenVerify.auth });
+    if (!resetRequestUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+  } else if (isEmail(tokenVerify.auth)) {
+    resetRequestUser = await User.findOne({ email: tokenVerify.auth });
+    if (!resetRequestUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+  }
+
+  if (otp !== resetRequestUser.accessToken) {
+    return res.status(400).json({ message: "Invalid OTP" });
+  }
+  resetRequestUser.password = newPassword
+  resetRequestUser.accessToken = null;
+  resetRequestUser.save();
+  res.clearCookie("verifyToken");
+})
 
 

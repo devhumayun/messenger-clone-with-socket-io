@@ -1,20 +1,45 @@
 import "./Auth.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import useFormFields from "../../hooks/useFormFields";
+import { useDispatch, useSelector } from 'react-redux'
+import { resetPasswordUiAction } from "../../features/auth/authApiSlice";
+import { getAuthData, setMessageEmpty } from "../../features/auth/authSlice";
+import { useEffect } from "react";
+import { createToast } from "../../utils/toast";
+import Cookies from "js-cookie";
 
 const Reset = () => {
 
+  const dispatch = useDispatch()
+  const { message, error } = useSelector(getAuthData);
+  const navigate = useNavigate()
   const { input, handleInputChange }  = useFormFields({
-    auth: ""
+    newPassword: "",
+    confPassword: "",
+    otp: "",
   })
 
-  const handleResetForm = (e) => {
-    e.preventDefault()
+  // get cookie
+  const token = Cookies.get("verifyToken")
 
-    console.log(input);
+  const handleResetAction = (e) => {
+    e.preventDefault()
+    dispatch(resetPasswordUiAction({token,input}))
   }
+
+  useEffect(() => {
+    if (message) {
+      createToast(message, "success");
+      dispatch(setMessageEmpty());
+      navigate("/login")
+    }
+    if (error) {
+      createToast(error);
+      dispatch(setMessageEmpty());
+    }
+  }, [message, error, dispatch, navigate]);
 
   return (
     <>
@@ -30,8 +55,10 @@ const Reset = () => {
               />
 
               <div className="auth-form">
-                <form onSubmit={handleResetForm}>
-                  <input type="text" placeholder="Email or Phone number" name="auth" value={input.auth} onChange={handleInputChange} />
+                <form onSubmit={handleResetAction}>
+                  <input type="text" placeholder="New Password" name="newPassword" value={input.newPassword} onChange={handleInputChange} />
+                  <input type="text" placeholder="Confirm Password" name="confPassword" value={input.confPassword} onChange={handleInputChange} />
+                  <input type="text" placeholder="OTP" name="otp" value={input.otp} onChange={handleInputChange} />
 
                   <button type="submit" className="bg-fb-green">Reset your password</button>
                 </form>

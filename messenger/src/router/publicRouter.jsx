@@ -28,7 +28,7 @@ const publicRouter = [
         element: <Forgot />,
       },
       {
-        path: "/reset",
+        path: "/reset-password",
         element: <Reset />,
       },
       {

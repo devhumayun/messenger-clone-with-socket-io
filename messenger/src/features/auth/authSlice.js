@@ -7,6 +7,8 @@ import {
   loginUser,
   logoutUser,
   resentActivationCode,
+  resetPasswordUi,
+  resetPasswordUiAction,
 } from "./authApiSlice";
 
 // create auth slice
@@ -79,6 +81,30 @@ const authSlice = createSlice({
         state.loader = false
       })
       .addCase(resentActivationCode.fulfilled, (state, action) => {
+        state.message = action.payload.message;
+        state.loader = false
+      })
+    // resent activation code
+      .addCase(resetPasswordUi.pending, (state) => {
+        state.loader = true
+      })
+      .addCase(resetPasswordUi.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loader = false
+      })
+      .addCase(resetPasswordUi.fulfilled, (state, action) => {
+        state.message = action.payload.message;
+        state.loader = false
+      })
+    // password reset action
+      .addCase(resetPasswordUiAction.pending, (state) => {
+        state.loader = true
+      })
+      .addCase(resetPasswordUiAction.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loader = false
+      })
+      .addCase(resetPasswordUiAction.fulfilled, (state, action) => {
         state.message = action.payload.message;
         state.loader = false
       })

@@ -6,12 +6,12 @@ export const AccountActivationEmail = async (email, data) => {
     host: "smtp.gmail.com",
     port: 587,
     auth: {
-      user: "becomeahaq@gmail.com",
-      pass: "nnhj lcly puzj hlxv",
+      user: "humayunkabir9408@gmail.com",
+      pass: "jscc ambn auis sste",
     },
   });
   await transport.sendMail({
-    from: "Messenger <becomeahaq@gmail.com>",
+    from: "Messenger <humayunkabir9408@gmail.com>",
     subject: "Activate",
     to: email,
     html: `
