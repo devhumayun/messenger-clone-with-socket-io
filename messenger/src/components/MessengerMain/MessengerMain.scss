@@ -165,10 +165,259 @@
     .chat-body{
         flex: 3;
         border-right: 1px solid #EBF5FF;
-        
+
+        .chat-body-wrapper{
+            display: flex;
+            flex-direction: column;
+
+            .chat-body-header{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: var(--shadow-sm);
+              .user{
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 11px 15px;
+
+                .user-photo{
+                    position: relative;
+                    img{
+                        width: 45px;
+                        height: 45px;
+                        border-radius: 50%;
+                    }
+                    .active-icon{
+                        position: absolute;
+                        right: 5px;
+                        bottom: 5px;
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 100px;
+                        background: #2E9A48;
+                        border: 2px solid #fff;
+                    }
+                    
+                }
+                .user-info{
+                    display: flex;
+                    flex-direction: column;
+                    .user-title{
+                        font-weight: 500;
+                        font-family: inherit;
+                        margin-bottom: -7px;
+                        margin-top: 7px;
+                    }
+                    .user-status{
+
+                    }
+                }
+              }
+              .full-screen{
+                  padding: 10px 15px;
+                span{
+                  font-size: 20px;
+                  cursor: pointer;
+                  background: var(--messenger-bg-active);
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  border-radius: 50%;
+                  width: 30px;
+                  height: 30px;
+                }
+              }
+            }
+
+            .chat-message-wrapper{
+                overflow-y: scroll;
+                height: 78vh;
+                .chat-body-profile{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 30px 0px 10px 0px;
+                    margin-bottom: 30px;
+    
+                    img{
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 50%;
+                    }
+                    .frnd-title{
+                        font-weight: 600;
+                    }
+                    .frnd-mess {
+                        font-weight: 400 !important;
+                    }
+                }
+                .chat-msg-list{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    padding: 0px 20px;
+    
+                    .my-msg{
+                        display: flex;
+                        justify-content: flex-end;
+                        flex-direction: column;
+                        align-items: flex-end;
+                        gap: 10px;
+                        .msg-txt{
+                            max-width: 50%;
+                            background-color: #0866FF;
+                            color: #fff;
+                            padding: 7px 10px;
+                            border-radius: 20px;
+                            font-family: inherit;
+                            font-size: 15px;
+                        }
+                        .msg-photo{
+                            img{
+                                width: 300px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                    .msg-time{
+                        text-align: center;
+                        span{
+                            
+                        }
+                    }
+                    .friend-msg{
+                        display: flex;
+                        gap: 10px;
+                        align-items: flex-end;
+                        img{
+                            width: 30px;
+                            height: 30px;
+                            object-fit: cover;
+                            border-radius: 50%;
+                        }
+                        .friends-msg-details{
+                            .friend-msg-txt{
+                                max-width: 50%;
+                                background: var(--messenger-bg-common);
+                                padding: 10px;
+                                border-radius: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        .chat-body-form{
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            .chat-icons{
+               width: 12%;
+               display: flex;
+               justify-content: space-between;
+               gap: 4px;
+               cursor: pointer;
+            }
+            .chat-form{
+                width: 84%;
+                label{
+                    position: relative;
+                    input{
+                        width: 100%;
+                        padding: 10px 20px;
+                        background-color: var(--messenger-bg-common);
+                        border-radius: 100px;
+                        border: none;
+                        
+
+                    }
+                    span{
+                        position: absolute;
+                        top: 4px;
+                        right: 12px;
+                        cursor: pointer;
+                    }
+                }
+                .emojipicker{
+                    position: absolute;
+                    right: 7%;
+                    bottom: 55px;
+                }
+            }
+            .chat-emoji{
+                width: 4%;
+                display: flex;
+                align-items: cneter;
+                justify-content: center;
+                span{
+                    cursor: pointer;
+                }
+            }
+        }
     }
     .chat-profile{
         flex: 1;
-        background: #7c4949;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .user-profile{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 5px;
+            img{
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+            }
+            .user-name{
+                font-size: 18px;
+                font-weight: 600;
+            }
+            .user-status{
+                font-size: 12px;
+            }
+            .notification{
+                margin-top: 14px;
+                display: flex;
+                gap: 20px;
+                span{
+                    width: 40px;
+                    height: 40px;
+                    background-color: var(--messenger-bg-common);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    &:hover{
+                        background-color: #dedede;
+                    }
+                }
+            }
+        }
+
+        .chat-options{
+            display: flex;
+            padding: 0px 15px;
+            flex-direction: column;
+            gap: 15px;
+            .Collapsible__trigger{
+                font-weight: 500;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .Collapsible__contentOuter{
+                margin-top: 5px;
+            }
+        }
     }
 }
