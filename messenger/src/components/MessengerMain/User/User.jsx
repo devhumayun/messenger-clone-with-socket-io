@@ -5,9 +5,7 @@ import EditSvg from "../../Svg/EditSvg";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import SearchSvg from "../../Svg/SearchSvg";
 import { useDispatch, useSelector } from 'react-redux'
-import { getUsersData } from "../../../features/user/userSlice";
 import { getUsers } from "../../../features/user/userApiSlice";
-import RandomAvatar from "../../Avater/RandomAvatar";
 import UserAvatar from "../../Avater/UserAvater";
 
 const User = () => {
@@ -70,7 +68,7 @@ const User = () => {
                         <div className="user-list-item" key={index}>
                           {
                             item.photo ?                         <img
-                            src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                            src={item.photo}
                             alt=""
                           /> :  <UserAvatar username={item.name} />
                           }

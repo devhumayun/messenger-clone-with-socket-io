@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+import "./AuthHeader.scss"
 const AuthHeader = ({ title, desc }) => {
   return (
     <>

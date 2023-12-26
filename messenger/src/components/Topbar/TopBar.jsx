@@ -44,7 +44,7 @@ const TopBar = () => {
           <div className="topbar-menu">
             <ul>
               <li>
-                <Link to="#">
+                <Link to="/">
                   <HomeSvg />
                 </Link>
               </li>
@@ -68,8 +68,9 @@ const TopBar = () => {
           <div className="topbar-user">
             <button onClick={toggleMenu}>
               {
-                user.photo ?                         <img
-                src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                user.photo ?                 
+                <img
+                src={user.photo}
                 alt=""
               /> : <UserAvatar username={user.name} />
               }
@@ -82,7 +83,7 @@ const TopBar = () => {
                       {" "}
                       <MdDarkMode /> <span> Moon </span>{" "}
                     </Link>
-                    <Link to="#">
+                    <Link to="/profile-edit">
                       {" "}
                       <FaUserEdit /> <span> Edit Profile </span>{" "}
                     </Link>

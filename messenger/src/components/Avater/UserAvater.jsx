@@ -5,7 +5,7 @@ const UserAvatar = ({ username }) => {
   const getColor = (username) => {
     // Generate a hash code from the username
     let hash = 0;
-    for (let i = 0; i < username.length; i++) {
+    for (let i = 0; i < username?.length; i++) {
       hash = username.charCodeAt(i) + ((hash << 5) - hash);
     }
 

@@ -9,6 +9,7 @@ import {
   resentActivationCode,
   resetPasswordUi,
   resetPasswordUiAction,
+  userProfilePhoto,
 } from "./authApiSlice";
 
 // create auth slice
@@ -132,6 +133,14 @@ const authSlice = createSlice({
       })
       .addCase(getLoggedInUser.fulfilled, (state, action) => {
         state.user = action.payload;
+      })
+      // user profile photo
+      .addCase(userProfilePhoto.pending, (state) => {
+        state.loader = true
+      })
+      .addCase(userProfilePhoto.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loader = false
       });
   },
 });

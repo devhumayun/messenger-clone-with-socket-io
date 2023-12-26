@@ -11,6 +11,7 @@ import {
 } from "../helpers/helpers.js";
 import { sendSMS } from "../utils/sendSMS.js";
 import { AccountActivationEmail } from "../mails/AccountActivationMail.js";
+import { cloudUpload } from "../utils/cloudinary.js";
 
 /**
  * @DESC User Login
@@ -468,5 +469,20 @@ export const resetPasswordAction = asyncHandler(async(req, res) => {
   resetRequestUser.save();
   res.clearCookie("verifyToken");
 })
+
+
+// Profile photo Change
+export const profilePhotoChange = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  
+  const file = await cloudUpload(req)
+  const user = await User.findByIdAndUpdate(id, {
+    photo: file.secure_url
+  }, {
+    new : true
+  })
+
+  return res.status(201).json({message: "Profile photo upload successfull", user})
+});
 
 

@@ -2,9 +2,9 @@ import cloudinary from "cloudinary";
 
 // config cloudinary
 cloudinary.v2.config({
-  cloud_name: "dis89p0kx",
-  api_key: "179378785211637",
-  api_secret: "fjH24wym4yj0jxJRXm-2Bh7EbLw",
+  cloud_name: "dmqquu0p4",
+  api_key: "332867628643741",
+  api_secret: "0UE6lh1T8Lk1lc-xVtC8P5fMTDw",
 });
 
 export const cloudUpload = async (req) => {
