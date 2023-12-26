@@ -146,3 +146,4 @@ export const resetPasswordUiAction = createAsyncThunk("auth/resetPasswordUiActio
     throw new Error(error.response.data.message);
   }
 });
+

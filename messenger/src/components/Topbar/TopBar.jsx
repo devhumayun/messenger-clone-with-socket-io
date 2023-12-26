@@ -1,9 +1,8 @@
 import "./Topbar.scss";
 import { CiSearch } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { GrHomeRounded } from "react-icons/gr";
-import { MdOutlineOndemandVideo, MdDarkMode } from "react-icons/md";
-import { CiShop, CiLogin } from "react-icons/ci";
+import {  MdDarkMode } from "react-icons/md";
+import { CiLogin } from "react-icons/ci";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
 import useDropdownPopupControl from "../../hooks/useDropdownPopupControl";
@@ -15,6 +14,7 @@ import HomeSvg from "../Svg/HomeSvg";
 import VideoSvg from "../Svg/VideoSvg";
 import MarketPlaceSvg from "../Svg/MarketPlaceSvg";
 import GroupSvg from "../Svg/GroupSvg";
+import UserAvatar from "../Avater/UserAvater";
 
 const TopBar = () => {
   const { user } = useAuthUser();
@@ -67,14 +67,12 @@ const TopBar = () => {
           </div>
           <div className="topbar-user">
             <button onClick={toggleMenu}>
-              {user.photo ? (
-                <img src={user.photo} />
-              ) : (
-                <img
-                  src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
-                  alt=""
-                />
-              )}
+              {
+                user.photo ?                         <img
+                src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                alt=""
+              /> : <UserAvatar username={user.name} />
+              }
             </button>
             {isOpen && (
               <div className="user-menu">

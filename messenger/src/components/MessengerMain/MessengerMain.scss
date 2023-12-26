@@ -133,6 +133,7 @@
                 gap: 12px;
                 padding: 10px 5px;
                 border-radius: 10px;
+                cursor: pointer;
                 &:hover{
                     background: var(--messenger-bg-common);
                 }
@@ -174,7 +175,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                box-shadow: var(--shadow-sm);
+                box-shadow: 0px 2px 1px rgba(0,0,0,.075);
               .user{
                 display: flex;
                 align-items: center;
