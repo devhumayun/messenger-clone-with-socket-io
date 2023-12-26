@@ -9,7 +9,16 @@ import User from "../models/User.js";
  * @access public
  */
 export const getAllUser = asyncHandler(async (req, res) => {
-  const users = await User.find().populate("role");
+  
+  const users = await User.find({
+    accessToken : null
+  }).select("-password")
+
+  if(users == 0){
+    res.status(404).json({
+      message: "User not found"
+    });
+  }
 
   if (users.length > 0) {
     res.status(200).json(users);
@@ -34,46 +43,6 @@ export const getSingleUser = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
-/**
- * @DESC Create new User
- * @ROUTE /api/v1/user
- * @method POST
- * @access public
- */
-export const createUser = asyncHandler(async (req, res) => {
-  const { name, email, password, role } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
-  // check user email
-  const userEmailCheck = await User.findOne({ email });
-
-  if (userEmailCheck) {
-    return res.status(400).json({ message: "Email already exists" });
-  }
-
-  // password hash
-  const hashPass = await bcrypt.hash(password, 10);
-
-  // create new user
-  const user = await User.create({
-    name,
-    email,
-    password: hashPass,
-    role,
-  });
-
-  // send user access to email
-  sendMail({
-    to: email,
-    sub: "Account Access Info",
-    msg: `Your account login access is email : ${email} & password : ${password}`,
-  });
-
-  res.status(200).json({ user, message: `${name} user created successful` });
-});
 
 /**
  * @DESC Delete User

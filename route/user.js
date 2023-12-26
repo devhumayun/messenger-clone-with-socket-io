@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  createUser,
   deleteUser,
   getAllUser,
   getSingleUser,
@@ -15,7 +14,7 @@ router.use(tokenVerify);
 
 // create route
 
-router.route("/").get(getAllUser).post(createUser);
+router.route("/").get(tokenVerify ,getAllUser)
 router.route("/:id").get(getSingleUser).delete(deleteUser).put(updateUser);
 
 // export default router
