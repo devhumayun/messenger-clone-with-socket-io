@@ -4,19 +4,19 @@ import DotsSvg from "../../Svg/DotsSvg";
 import EditSvg from "../../Svg/EditSvg";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import SearchSvg from "../../Svg/SearchSvg";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../../features/user/userApiSlice";
 import UserAvatar from "../../Avater/UserAvater";
 
-const User = () => {
+const User = ({ setActiveUser, activeUser }) => {
   // search left arrow
   const [searchLeftArrow, setSearchLeftArrow] = useState(false);
-  const dispatch = useDispatch()
-  const { user } = useSelector( state => state.user)
-    console.log(user);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
-    dispatch(getUsers())
-  }, [dispatch])
+    dispatch(getUsers());
+  }, [dispatch]);
   return (
     <>
       <div className="chat-user">
@@ -62,27 +62,28 @@ const User = () => {
           </div>
         </div>
         <div className="user-list-info">
-            {
-                user?.map((item, index) => {
-                    return(
-                        <div className="user-list-item" key={index}>
-                          {
-                            item.photo ?                         <img
-                            src={item.photo}
-                            alt=""
-                          /> :  <UserAvatar username={item.name} />
-                          }
-                        <div className="chat-info">
-                          <span className="chat-user-title"> {item.name} </span>
-                          <div className="">
-                            <span className="chat-short"> Kmn achen Bhai </span>
-                            <span className="chat-time"> 1h </span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                })
-            }
+          {user?.map((item, index) => {
+            return (
+              <div
+                className={`user-list-item ${item._id === activeUser?._id ? "active" : ""}`}
+                key={index}
+                onClick={() => setActiveUser(item)}
+              >
+                {item.photo ? (
+                  <img src={item.photo} alt="" />
+                ) : (
+                  <UserAvatar username={item.name} />
+                )}
+                <div className="chat-info">
+                  <span className="chat-user-title"> {item.name} </span>
+                  <div className="">
+                    <span className="chat-short"> Kmn achen Bhai </span>
+                    <span className="chat-time"> 1h </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

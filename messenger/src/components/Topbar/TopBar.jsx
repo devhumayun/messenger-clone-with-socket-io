@@ -79,6 +79,7 @@ const TopBar = () => {
               <div className="user-menu">
                 <ul>
                   <li>
+                    <Link to="/profile-edit"> { user.name } </Link>
                     <Link to="#">
                       {" "}
                       <MdDarkMode /> <span> Moon </span>{" "}
