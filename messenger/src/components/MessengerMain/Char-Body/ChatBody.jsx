@@ -10,7 +10,6 @@ import EmojiPicker from "emoji-picker-react";
 import useDropdownPopupControl from "../../../hooks/useDropdownPopupControl";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import useFormFields from "../../../hooks/useFormFields";
 import { activeChatUser, createChatMsg } from "../../../features/Chat/chatApiSlice";
 import UserAvatar from "../../Avater/UserAvater";
 
@@ -152,8 +151,13 @@ const ChatBody = ({ activeUser }) => {
           </>
         ) : (
           <>
-            <div>
-              hello
+            <div className="unchecked-chat-icon">
+              <div className="icon">
+                <img src="https://i.pinimg.com/564x/5e/cc/d9/5eccd9cc5c69b17370f773fdbbe8c5b9.jpg" alt="" />
+              </div>
+              <div className="text">
+                 No chats selected
+              </div>
             </div>
           </>
         )}

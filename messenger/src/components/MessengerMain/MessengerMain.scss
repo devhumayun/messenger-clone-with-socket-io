@@ -379,6 +379,26 @@
                 }
             }
         }
+        .unchecked-chat-icon{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+            gap: 12px;
+
+            .icon{
+                img{
+                    width: 150px;
+                    height: 150px;
+                    object-fit: cover;
+                }
+            }
+            .text{
+                font-size: 19px;
+                font-weight: 600;
+            }
+        }
     }
     .chat-profile{
         flex: 1;
