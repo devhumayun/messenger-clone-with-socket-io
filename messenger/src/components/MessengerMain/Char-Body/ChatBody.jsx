@@ -9,9 +9,9 @@ import ThumbsUpSvg from "../../Svg/ThumbsUpSvg";
 import EmojiPicker from "emoji-picker-react";
 import useDropdownPopupControl from "../../../hooks/useDropdownPopupControl";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useFormFields from "../../../hooks/useFormFields";
-import { activeChatUser } from "../../../features/Chat/chatApiSlice";
+import { activeChatUser, createChatMsg } from "../../../features/Chat/chatApiSlice";
 import UserAvatar from "../../Avater/UserAvater";
 
 const ChatBody = ({ activeUser }) => {
@@ -20,12 +20,16 @@ const ChatBody = ({ activeUser }) => {
   const dispatch = useDispatch();
 
   const { chatUser } = useSelector((state) => state.chat);
-
-  const { input, handleInputChange } = useFormFields({
-    name: "",
-  });
-
-  const handleChatMessage = (e) => {};
+  const [ input, setInput ] = useState("")
+  const handleChatMessage = (e) => {
+    if( e.key === "Enter" ){
+      dispatch(createChatMsg({
+        chat: input,
+        receiverId: activeUser
+      }))
+      setInput("")
+    }
+  };
 
   useEffect(() => {
     dispatch(activeChatUser(activeUser));
@@ -123,8 +127,8 @@ const ChatBody = ({ activeUser }) => {
                     placeholder="Aa"
                     name="name"
                     onKeyDown={handleChatMessage}
-                    value={input.name}
-                    onChange={handleInputChange}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
                   />
                   <span onClick={toggleMenu}>
                     {" "}
