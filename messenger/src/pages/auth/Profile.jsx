@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userProfilePhoto } from "../../features/auth/authApiSlice";
 import { getAuthData } from "../../features/auth/authSlice";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import { useEffect } from "react";
 
 const Profile = () => {
 
@@ -23,6 +24,8 @@ const Profile = () => {
     form_data.append('profile-photo', profilePhoto)
     dispatch(userProfilePhoto({data: form_data, id: user._id}))
   }
+
+  
 
   return <>
     <TopBar />

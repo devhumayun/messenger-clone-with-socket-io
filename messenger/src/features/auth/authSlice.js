@@ -139,7 +139,7 @@ const authSlice = createSlice({
         state.loader = true
       })
       .addCase(userProfilePhoto.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload.user;
         state.loader = false
       });
   },
