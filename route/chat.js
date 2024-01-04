@@ -1,6 +1,6 @@
 import express from "express";
 import tokenVerify from "../middlewares/verifyToken.js";
-import { createChat, getActiveChatUser } from "../controllers/chatController.js";
+import { createChat, getActiveChatUser, getUserChats } from "../controllers/chatController.js";
 
 const router = express.Router();
 
@@ -10,6 +10,7 @@ router.use(tokenVerify);
 // create route
 
 router.route("/:id").get(tokenVerify ,getActiveChatUser)
+router.route("/message/:id").get(tokenVerify ,getUserChats)
 router.route("/").post(tokenVerify ,createChat)
 
 

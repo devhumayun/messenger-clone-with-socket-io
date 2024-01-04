@@ -73,7 +73,7 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 /**
- * @DESC User Login
+ * @DESC User logout
  * @ROUTE /api/v1/auth/login
  * @method POST
  * @access public

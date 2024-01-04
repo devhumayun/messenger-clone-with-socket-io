@@ -1,3 +1,4 @@
+import ChatBody from "../components/MessengerMain/Char-Body/ChatBody";
 import Profile from "../pages/auth/Profile";
 import Messenger from "../pages/messenger/Messenger";
 import PrivateGard from "./PrivateGard";
@@ -14,6 +15,10 @@ const privateRouter = [
       {
         path: "/profile-edit",
         element: <Profile />,
+      },
+      {
+        path: "/t/:id",
+        element: <ChatBody />,
       },
     ],
   },

@@ -18,6 +18,47 @@ export const getActiveChatUser = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @DESC Get active chat user
+ * @ROUTE /api/v1/chat
+ * @method GET
+ */
+export const getUserChats = asyncHandler(async (req, res) => {
+
+    const receiverId = req.params.id
+    const senderId = req.me._id
+
+    const chatMsg = await Chat.find({
+        $or: [
+            {
+                $and: [
+                    {
+                        senderId : { $eq: senderId}
+                    },
+                    {
+                        receiverId : { $eq: receiverId}
+                    }
+                ]
+            },
+            {
+                $and: [
+                    {
+                        senderId : { $eq: receiverId}
+                    },
+                    {
+                        receiverId : { $eq: senderId}
+                    }
+                ]
+            }
+        ]
+    })
+
+    res.status(200).json({
+        chats : chatMsg
+    })
+  
+});
+
+/**
  * @DESC create new chat data
  * @ROUTE /api/v1/chat
  * @method POST
