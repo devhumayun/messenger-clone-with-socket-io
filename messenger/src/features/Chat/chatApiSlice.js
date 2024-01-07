@@ -16,6 +16,21 @@ export const activeChatUser = createAsyncThunk("chat/activeChatUser", async (id)
     throw new Error(error.response.data.message);
   }
 });
+// get user to user chat message
+export const getUserToUserChatMessage = createAsyncThunk("chat/getUserToUserChatMessage", async (id) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5050/api/v1/chat/message/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+});
 
 // create new chat
 export const createChatMsg = createAsyncThunk("chat/createChatMsg", async (data) => {

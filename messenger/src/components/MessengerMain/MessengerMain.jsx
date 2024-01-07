@@ -13,7 +13,9 @@ const MessengerMain = () => {
     <>
       <div className="chat-container">
         <User setActiveUser={setActiveUser} activeUser={activeUser} />
+
         <ChatBody activeUser={activeUser?._id} />
+        
         {activeUser && (
           <div className="chat-profile">
             <div className="user-profile">

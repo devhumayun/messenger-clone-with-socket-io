@@ -10,30 +10,47 @@ import EmojiPicker from "emoji-picker-react";
 import useDropdownPopupControl from "../../../hooks/useDropdownPopupControl";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { activeChatUser, createChatMsg } from "../../../features/Chat/chatApiSlice";
+import {
+  activeChatUser,
+  createChatMsg,
+  getUserToUserChatMessage,
+} from "../../../features/Chat/chatApiSlice";
 import UserAvatar from "../../Avater/UserAvater";
+import useAuthUser from "../../../hooks/useAuthUser";
 
 const ChatBody = ({ activeUser }) => {
   // for emoji
   const { isOpen, toggleMenu } = useDropdownPopupControl();
   const dispatch = useDispatch();
-
-  const { chatUser } = useSelector((state) => state.chat);
-  const [ input, setInput ] = useState("")
+  // get loggedin user
+  const { user } = useAuthUser()
+  // from chatSlice
+  const { chatUser, chat, loader } = useSelector((state) => state.chat);
+  // create chat message
+  const [input, setInput] = useState("");
   const handleChatMessage = (e) => {
-    if( e.key === "Enter" ){
-      dispatch(createChatMsg({
-        chat: input,
-        receiverId: activeUser
-      }))
-      setInput("")
+    if (e.key === "Enter") {
+      dispatch(
+        createChatMsg({
+          chat: input,
+          receiverId: activeUser,
+        })
+      );
+      setInput("");
     }
   };
-
+  // defined active chating user
   useEffect(() => {
     dispatch(activeChatUser(activeUser));
   }, [dispatch, activeUser]);
 
+ 
+  // load user to user chat message
+  useEffect(() => {
+    dispatch(getUserToUserChatMessage(activeUser));
+  }, [dispatch, chat]);
+
+  
   return (
     <>
       <div className="chat-body">
@@ -64,52 +81,56 @@ const ChatBody = ({ activeUser }) => {
               </div>
               <div className="chat-message-wrapper">
                 <div className="chat-body-profile">
-                    {chatUser.photo ? (
-                        <img src={chatUser.photo} alt="" />
-                      ) : (
-                        <UserAvatar username={chatUser?.name} />
-                      )}
+                  {chatUser.photo ? (
+                    <img src={chatUser.photo} alt="" />
+                  ) : (
+                    <UserAvatar username={chatUser?.name} />
+                  )}
                   <span className="frnd-title"> {chatUser?.name} </span>
                   <span className="frnd-mess">
                     {" "}
                     You are friends on Facebook{" "}
                   </span>
                 </div>
-                <div className="chat-msg-list">
-                  <div className="my-msg">
-                    <div className="msg-txt">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Cumque qui illo hic, earum pariatur quaerat! Enim iste
-                      doloremque libero. Similique iste laboriosam aliquam,
-                      tempore beatae repellat praesentium nemo! Qui, accusamus?
-                    </div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span> 11:42 PM </span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
+                
+                  {chat?.map((item, index) => {
+                    return (
+                      <>
+                      <div className="chat-msg-list" key={index}>
+                        {
+                          item.senderId === user._id ? 
+                          <div className="my-msg">
+                          <div className="msg-txt">
+                            {item.message.text}
+                          </div>
+                          {/* <div className="msg-photo">
+                            <img
+                              src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                              alt=""
+                            />
+                          </div> */}
+                        </div>
+                        :
+                        <div className="friend-msg">
+                        <img
+                          src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                          alt=""
+                        />
 
-                    <div className="friends-msg-details">
-                      <div className="friend-msg-txt">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Hic quos ipsum rem nesciunt culpa commodi
-                        possimus. Nihil vero unde in ipsa similique? Facere
-                        reprehenderit officiis suscipit voluptatum voluptatibus
-                        quisquam optio nemo consequatur minima.
+                        <div className="friends-msg-details">
+                          <div className="friend-msg-txt">
+                           {item.message.text}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                        }
+                        {/* <div className="msg-time">
+                          <span> 11:42 PM </span>
+                        </div> */}
+                        </div>
+                      </>
+                    );
+                  })}
               </div>
             </div>
             <div className="chat-body-form">
@@ -153,11 +174,12 @@ const ChatBody = ({ activeUser }) => {
           <>
             <div className="unchecked-chat-icon">
               <div className="icon">
-                <img src="https://i.pinimg.com/564x/5e/cc/d9/5eccd9cc5c69b17370f773fdbbe8c5b9.jpg" alt="" />
+                <img
+                  src="https://i.pinimg.com/564x/5e/cc/d9/5eccd9cc5c69b17370f773fdbbe8c5b9.jpg"
+                  alt=""
+                />
               </div>
-              <div className="text">
-                 No chats selected
-              </div>
+              <div className="text">No chats selected</div>
             </div>
           </>
         )}

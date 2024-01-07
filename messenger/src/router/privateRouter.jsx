@@ -19,6 +19,7 @@ const privateRouter = [
       {
         path: "/t/:id",
         element: <ChatBody />,
+        
       },
     ],
   },

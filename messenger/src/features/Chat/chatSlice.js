@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { activeChatUser } from "./chatApiSlice";
+import { activeChatUser, getUserToUserChatMessage } from "./chatApiSlice";
 
 // create auth slice
 const chatSlice = createSlice({
@@ -31,6 +31,9 @@ const chatSlice = createSlice({
         state.message = action.payload.message;
         state.loader = false
         state.chatUser = action.payload.chat_user
+      })
+      .addCase(getUserToUserChatMessage.fulfilled, (state, action) => {
+        state.chat = action.payload.chats
       })
   },
 });
