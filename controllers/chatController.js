@@ -9,7 +9,7 @@ import Chat from "../models/Chat.js";
  */
 export const getActiveChatUser = asyncHandler(async (req, res) => {
 
-    const id = req.params.id
+  const id = req.params.id
    
   const chat_user = await User.findById(id)
   if (chat_user) {
